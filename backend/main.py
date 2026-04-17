@@ -73,6 +73,12 @@ class Card(pydantic.BaseModel):
     bank_account_id: str
     spending_limit: float
 
+class CardTransaction(pydantic.BaseModel):
+    card_number: str
+    cvv: str
+    amount: float
+    description: Optional[str] = None
+
 @app.post("/register/")
 def add_user(user: User):
     try:
@@ -292,6 +298,30 @@ def get_card(card_id: str):
                 "spending_limit": card[7],
                 "spent_money": card[8]
             }
+        else:
+            return {"error": "Card not found"}
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+@app.post("/spend/")
+def spend(card: CardTransaction):
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT spending_limit, spent_money, cvv, expiration_date FROM cards WHERE card_number = ?", (card.card_number,))
+        card_data = cursor.fetchone()
+        if card_data:
+            if card_data[2] != card.cvv:
+                return {"error": "Invalid CVV"}
+            if card_data[3] < datetime.datetime.now().strftime("%Y-%m-%d"):
+                return {"error": "Card has expired"}
+            if card_data[1] + card.amount > card_data[0]:
+                return {"error": "Spending limit exceeded"}
+            cursor.execute("UPDATE cards SET spent_money = spent_money + ? WHERE id = ?", (card.amount, card.card_id))
+            conn.commit()
+            return {"message": "Transaction successful"}
         else:
             return {"error": "Card not found"}
     except Exception as e:
