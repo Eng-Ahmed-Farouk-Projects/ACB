@@ -58,6 +58,13 @@ class BankAccount(pydantic.BaseModel):
     owner_id: str
     super_admin_token: str
 
+class Transaction(pydantic.BaseModel):
+    title: str
+    sender_bank_account_id: str
+    sender_user_id: str
+    receiver_bank_account_id: str
+    amount: float
+
 @app.post("/register/")
 def add_user(user: User):
     try:
@@ -181,6 +188,53 @@ def get_bank_account(account_id: str):
             }
         else:
             return {"error": "Bank account not found"}
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+@app.post("/new_transaction/")
+def new_transaction(transaction: Transaction):
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        transaction_id = str(uuid.uuid4())
+        cursor.execute("INSERT INTO transactions (id, title, sender_bank_account_id, sender_user_id, receiver_bank_account_id, amount, timestamp, notes, receipts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                       (transaction_id, transaction.title, transaction.sender_bank_account_id, transaction.sender_user_id, transaction.receiver_bank_account_id, transaction.amount, datetime.datetime.now()))
+        conn.commit()
+        return {
+            "transaction_id": transaction_id,
+            "title": transaction.title,
+            "sender_bank_account_id": transaction.sender_bank_account_id,
+            "sender_user_id": transaction.sender_user_id,
+            "receiver_bank_account_id": transaction.receiver_bank_account_id,
+            "amount": transaction.amount,
+            "timestamp": datetime.datetime.now()
+        }
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+@app.get("/transactions/{transaction_id}")
+def get_transaction(transaction_id: str):
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, title, sender_bank_account_id, sender_user_id, receiver_bank_account_id, amount, timestamp FROM transactions WHERE id = ?", (transaction_id,))
+        transaction = cursor.fetchone()
+        if transaction:
+            return {
+                "id": transaction[0],
+                "title": transaction[1],
+                "sender_bank_account_id": transaction[2],
+                "sender_user_id": transaction[3],
+                "receiver_bank_account_id": transaction[4],
+                "amount": transaction[5],
+                "timestamp": transaction[6]
+            }
+        else:
+            return {"error": "Transaction not found"}
     except Exception as e:
         return {"error": str(e)}
     finally:
