@@ -7,7 +7,9 @@ import uuid
 import bcrypt
 import jwt
 import os
+import faker
 
+fake = faker.Faker()
 SECRET_KEY = os.getenv("secret_key")
 ALGORITHM = os.getenv("algorithm")
 
@@ -64,6 +66,12 @@ class Transaction(pydantic.BaseModel):
     sender_user_id: str
     receiver_bank_account_id: str
     amount: float
+
+class Card(pydantic.BaseModel):
+    card_name: str
+    card_holder_id: str
+    bank_account_id: str
+    spending_limit: float
 
 @app.post("/register/")
 def add_user(user: User):
@@ -239,3 +247,56 @@ def get_transaction(transaction_id: str):
         return {"error": str(e)}
     finally:
         conn.close()
+
+@app.post("/new_card/")
+def new_card(card: Card):
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        card_id = str(uuid.uuid4())
+        cursor.execute("INSERT INTO cards (id, card_name, card_holder_id, card_number, expiration_date, cvv, bank_account_id, spending_limit, spent_money) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                       (card_id, card.card_name, card.card_holder_id, fake.credit_card_number(), fake.credit_card_expire(), fake.credit_card_security_code(), card.bank_account_id, card.spending_limit, 0.0))
+        conn.commit()
+        return {
+            "card_id": card_id,
+            "card_name": card.card_name,
+            "card_holder_id": card.card_holder_id,
+            "bank_account_id": card.bank_account_id,
+            "card_number": fake.credit_card_number(),
+            "expiration_date": fake.credit_card_expire(),
+            "cvv": fake.credit_card_security_code(),
+            "spending_limit": card.spending_limit
+        }
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+@app.get("/cards/{card_id}")
+def get_card(card_id: str):
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, card_name, card_holder_id, card_number, expiration_date, cvv, bank_account_id, spending_limit, spent_money FROM cards WHERE id = ?",
+                       (card_id,))
+        card = cursor.fetchone()
+        if card:
+            return {
+                "id": card[0],
+                "card_name": card[1],
+                "card_holder_id": card[2],
+                "card_number": card[3],
+                "expiration_date": card[4],
+                "cvv": card[5],
+                "bank_account_id": card[6],
+                "spending_limit": card[7],
+                "spent_money": card[8]
+            }
+        else:
+            return {"error": "Card not found"}
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+

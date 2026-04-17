@@ -49,7 +49,9 @@ def setup():
                     card_number TEXT NOT NULL,
                     expiration_date DATETIME NOT NULL,
                     cvv TEXT NOT NULL,
-                    bank_account_id TEXT NOT NULL
+                    bank_account_id TEXT NOT NULL,
+                    spending_limit REAL NOT NULL,
+                    spent_money REAL NOT NULL
                 )""")
     
     cursor.execute("""
