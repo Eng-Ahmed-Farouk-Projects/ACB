@@ -100,6 +100,7 @@ def add_user(user: User):
         cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, bank_accounts, cards) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     (user_id, user.username, user.display_name, user.password, user.email, datetime.datetime.now(), "[]", "[]"))
         conn.commit()
+        return {"token": create_token(user_id)}
     except Exception as e:
         return {"error": str(e)}
     finally:
