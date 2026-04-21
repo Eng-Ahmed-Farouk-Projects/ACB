@@ -1,4 +1,6 @@
 import fastapi
+import fastapi.middleware
+import fastapi.middleware.cors
 import pydantic
 from typing import Optional
 import sqlite3
@@ -19,6 +21,13 @@ def encrypt_password(password: str):
     return hashed_password.decode('utf-8')
 
 app = fastapi.FastAPI()
+
+app.add_middleware(
+    fastapi.middleware.cors.CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def create_token(user_id: str):
     conn = sqlite3.connect("database.db")
@@ -55,6 +64,9 @@ class User(pydantic.BaseModel):
     password: str
     email: str
 
+class LoginRequest(pydantic.BaseModel):
+    username: str
+    password: str
 class BankAccount(pydantic.BaseModel):
     name: str
     owner_id: str
@@ -117,21 +129,21 @@ def get_user(user_id: str):
         conn.close()
 
 @app.post("/login/")
-def login(username: str, password: str):
+def login(login_request: LoginRequest):
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
-        cursor.execute("SELECT id, encrypted_password FROM users WHERE username = ?", (username,))
+        cursor.execute("SELECT id, encrypted_password FROM users WHERE username = ?", (login_request.username,))
         user = cursor.fetchone()
         if user:
             stored_password = user[1]
-            if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+            if bcrypt.checkpw(login_request.password.encode('utf-8'), stored_password.encode('utf-8')):
                 token = create_token(user[0])
                 return {"logged_in": True,"token":token, "user_id": user[0]}
         else:
             return {"logged_in": False, "error": "Invalid username or password"}
     except Exception as e:
-        return {"error": str(e)}
+        raise fastapi.HTTPException(status_code=500, detail=str(e))
     finally:
         conn.close()
 
