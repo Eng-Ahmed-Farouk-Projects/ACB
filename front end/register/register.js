@@ -1,7 +1,7 @@
 const API_URL = "http://127.0.0.1:8000/";
 const msg_area = document.getElementById("message-area");
 
-async function login(){
+async function register(){
     let username = document.getElementById("username").value;
     let display_name = document.getElementById("display-name").value;
     let password = document.getElementById("password").value;
@@ -18,6 +18,7 @@ async function login(){
     }
     if (password.length < 8){
         write_msg("Password must be at least 8 characters");
+        return;
     }
 
     let response = await fetch(API_URL + "register/",{
@@ -38,7 +39,7 @@ async function login(){
         setTimeout(function(){
             localStorage.setItem("token", data.token);
             window.location.href = "../dashboard/dashboard.html";
-        }, 5000);
+        }, 2000);
     }
     else{
         write_msg(data.detail);
@@ -53,12 +54,23 @@ function write_msg(msg, type="error"){
 document.getElementById("submit-btn").addEventListener("click", function(event) {
     event.preventDefault();
     event.stopPropagation();
-    login(event);
+    register();
+    return false;
 });
 
 document.getElementById("login-form").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
-        login(event);
+        event.stopPropagation();
+        register();
+        return false;
     }
+});
+
+document.getElementById("login-form").addEventListener("submit", function(event) {
+    console.log("Form submit prevented");
+    event.preventDefault();
+    event.stopPropagation();
+    register(event);
+    return false;
 });

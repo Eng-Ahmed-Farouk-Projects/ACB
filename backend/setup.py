@@ -5,7 +5,7 @@ def setup():
     cursor = conn.cursor()
 
     cursor.execute("""
-                CREATE TABLE IF NOT EXISTS bank_accounts (
+                CREATE TABLE IF NOT EXISTS organizations (
                     id TEXT PRIMARY KEY,
                     name TEXT NOT NULL,
                     balance REAL NOT NULL,
@@ -74,6 +74,19 @@ def setup():
     conn.commit()
     conn.close()
 
-if __name__ == "__main__":
+def reset_database():
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+    cursor.execute("DROP TABLE IF EXISTS organizations")
+    cursor.execute("DROP TABLE IF EXISTS transactions")
+    cursor.execute("DROP TABLE IF EXISTS users")
+    cursor.execute("DROP TABLE IF EXISTS cards")
+    cursor.execute("DROP TABLE IF EXISTS notes")
+    cursor.execute("DROP TABLE IF EXISTS pending_accounts")
     setup()
+    conn.commit()
+    conn.close()
+
+if __name__ == "__main__":
+    reset_database()
     print("Database setup completed.")

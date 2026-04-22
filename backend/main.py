@@ -32,7 +32,7 @@ app.add_middleware(
 def create_token(user_id: str):
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT username, display_name, bank_accounts, id, Email, super_admin FROM users WHERE id = ?", (user_id,))
+    cursor.execute("SELECT username, display_name, organizations, id, Email, super_admin FROM users WHERE id = ?", (user_id,))
     user = cursor.fetchone()
     if user:
         payload = {
@@ -40,7 +40,7 @@ def create_token(user_id: str):
             "username": user[0],
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=7),
             "display_name": user[1],
-            "bank_accounts": user[2],
+            "organizations": user[2],
             "email": user[4],
             "is_super_admin": user[5]
         }
@@ -67,7 +67,7 @@ class User(pydantic.BaseModel):
 class LoginRequest(pydantic.BaseModel):
     username: str
     password: str
-class BankAccount(pydantic.BaseModel):
+class Organization(pydantic.BaseModel):
     name: str
     owner_id: str
     super_admin_token: str
@@ -97,8 +97,8 @@ def add_user(user: User):
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
         user_id = str(uuid.uuid4())
-        cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, bank_accounts, cards) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                    (user_id, user.username, user.display_name, user.password, user.email, datetime.datetime.now(), "[]", "[]"))
+        cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, organizations, cards) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    (user_id, user.username, user.display_name, encrypt_password(user.password), user.email, datetime.datetime.now(), "[]", "[]"))
         conn.commit()
         return {"token": create_token(user_id)}
     except Exception as e:
@@ -108,6 +108,13 @@ def add_user(user: User):
 
 @app.get("/users/{user_id}/")
 def get_user(user_id: str):
+    if user_id == "-1":
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, username, display_name, Email, created_at, super_admin FROM users")
+        users = cursor.fetchall()
+        print(users)
+        return [{"id": user[0], "username": user[1], "display_name": user[2], "email": user[3], "created_at": user[4], "is_super_admin":user[5]} for user in users]
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
@@ -148,8 +155,8 @@ def login(login_request: LoginRequest):
     finally:
         conn.close()
 
-@app.post("/new_bank_account/")
-def add_bank_account_form(form: BankAccount):
+@app.post("/new_organization/")
+def add_organization(form: Organization):
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
@@ -186,7 +193,7 @@ def approve_account(account_name: str, super_admin_token: str):
         account = cursor.fetchone()
         if account:
             account_id = str(uuid.uuid4())
-            cursor.execute("INSERT INTO bank_accounts (id, name, balance, owner_id, created_at, members, approver) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            cursor.execute("INSERT INTO organizations (id, name, balance, owner_id, created_at, members, approver) VALUES (?, ?, ?, ?, ?, ?, ?)",
                            (account_id, account[0], 0.0, account[1], datetime.datetime.now(), "[]", token_data["user_id"]))
             cursor.execute("DELETE FROM pending_accounts WHERE name = ?", (account_name,))
             conn.commit()
@@ -198,12 +205,12 @@ def approve_account(account_name: str, super_admin_token: str):
     finally:
         conn.close()
 
-@app.get("/bank_accounts/{account_id}")
+@app.get("/organizations/{account_id}")
 def get_bank_account(account_id: str):
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
-        cursor.execute("SELECT bank_accounts.id, bank_accounts.name, bank_accounts.balance, users.display_name, bank_accounts.created_at FROM bank_accounts JOIN users ON bank_accounts.id = users.id WHERE bank_accounts.id = ?", (account_id,))
+        cursor.execute("SELECT organizations.id, organizations.name, organizations.balance, users.display_name, organizations.created_at FROM organizations JOIN users ON organizations.id = users.id WHERE organizations.id = ?", (account_id,))
         account = cursor.fetchone()
         if account:
             return {

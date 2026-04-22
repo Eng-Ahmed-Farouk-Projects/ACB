@@ -1,4 +1,5 @@
 const API_URL = "http://127.0.0.1:8000/";
+msg_area = document.getElementById("message-area");
 
 async function login(){
     let username = document.getElementById("username").value;
@@ -13,12 +14,10 @@ async function login(){
             password: password
         })
     })
-    msg_area = document.getElementById("message-area");
     let data = await response.json();
     if(response.status == 200){
         if (data.logged_in){ 
-            msg_area.innerHTML = "You have logged in, You will be redirected in 5 seconds";
-            msg_area.className = "message-area success";
+            write_msg("You have logged in, You will be redirected in 5 seconds", "success");
             setTimeout(function(){
                 localStorage.setItem("token", data.token);
                 window.location.href = "../dashboard/dashboard.html";
@@ -26,25 +25,28 @@ async function login(){
 
         }
         else{
-            msg_area.innerHTML = data.error;
-            msg_area.className = "message-area error";
+            write_msg(data.error)
         }
     }
     else{
-        msg_area.innerHTML = data.detail;
-        msg_area.className = "message-area error";
+        write_msg(data.detail);
     }
+}
+
+function write_msg(msg, type="error"){
+    msg_area.innerHTML = msg;
+    msg_area.className = "message-area " + type;
 }
 
 document.getElementById("submit-btn").addEventListener("click", function(event) {
     event.preventDefault();
     event.stopPropagation();
-    login(event);
+    login();
 });
 
 document.getElementById("login-form").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
-        login(event);
+        login();
     }
 });
