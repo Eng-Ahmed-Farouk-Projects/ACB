@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="side-bar">
+            <div class="logo">
+                <span>ACB</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item"><span>Home</span></a>
+                <a href="#cards" class="nav-item"><span>Cards</span></a>
+                <a href="profile.html" class="nav-item"><span>Profile</span></a>
+            </nav>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+        <div class="main">
+            <div class="header">
+                <div class="welcome-message">
+                    <h1>Welcome <span id="display-name">User</span>!</h1>
+                </div>
+            </div>
+            <div class="content">
+                <h2 id="organizations">Your organizations</h2>
+                <div id="organizations" class="organizations"></div>
+            </div>
+    
+        </div>
+    </div>
+</body>
+</html>
