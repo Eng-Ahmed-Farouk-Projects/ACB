@@ -67,10 +67,11 @@ class User(pydantic.BaseModel):
 class LoginRequest(pydantic.BaseModel):
     username: str
     password: str
+
 class Organization(pydantic.BaseModel):
     name: str
     owner_id: str
-    super_admin_token: str
+    description: str
 
 class Transaction(pydantic.BaseModel):
     title: str
@@ -169,6 +170,7 @@ def add_organization(form: Organization):
         cursor.execute("INSERT INTO pending_accounts (name, owner_id, description) VALUES (?, ?, ?)",
                     (form.name, form.owner_id, form.description))
         conn.commit()
+        return {"message": "Organization request submitted successfully"}
     except Exception as e:
         return {"error": str(e)}
     finally:

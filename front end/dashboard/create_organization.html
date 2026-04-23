@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an organization</title>
+    <link href="create_organization.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="side-bar">
+            <div class="logo">
+                <span>ACB</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item"><span>Home</span></a>
+                <a href="dashboard.html#Cards" class="nav-item"><span>Cards</span></a>
+                <a href="profile.html" class="nav-item"><span>Profile</span></a>
+            </nav>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>  
+        <div class="main">
+            <div class="header">
+                <div class="welcome-message">
+                    <h1>Create an organization</h1>
+                </div>
+            </div>
+            <div class="content">
+                <div class="form-container">
+                    <form id="create-organization-form" class="create-organization-form">
+                        <div class="inputs">
+                            <div class="input-group">
+                                <label for="org-name">
+                                    Organization Name
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" id="name" name="name" placeholder="Organization Name" required>
+                                <small class="form-hint">Choose a unique name for your organization</small>
+                            </div>
+                            <div class="input-group">
+                                <label for="description">
+                                    Description
+                                </label>
+                                <input type="text" id="description" name="description" placeholder="Organization description">
+                                <small class="form-hint">Describe your organization and give us details like what you did and what you plan to do and why you want to join us</small>
+                            </div>
+                        </div>
+                        <button id="submit-btn" class="submit-btn" type="button"><span class="button-text">Create</span></button>
+                        <div id="message-area" class="message-area"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="create_organization.js"></script>
+</body>
+</html>

@@ -245,3 +245,13 @@ body{
     border-radius: 20px;
     grid-column: 1 / -1;
 }
+
+.error {
+    text-align: center;
+    font-size: 15px;
+    color: #e53e3e;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 20px;
+    grid-column: 1 / -1;
+}
