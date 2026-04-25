@@ -190,5 +190,13 @@ body {
     box-shadow: 0px 4px 10px rgba(3, 15, 158, 0.3);
 }
 
-
+.message-area.error {
+    text-align: center;
+    font-size: 25px;
+    color: #e53e3e;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 20px;
+    grid-column: 1 / -1;
+}
 

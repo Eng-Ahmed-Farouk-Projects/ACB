@@ -1,4 +1,8 @@
 import sqlite3
+import os
+import bcrypt
+import uuid
+import datetime
 
 def setup():
     conn = sqlite3.connect("database.db")
@@ -67,7 +71,7 @@ def setup():
     cursor.execute("""
                 CREATE TABLE IF NOT EXISTS pending_accounts (
                     name TEXT PRIMARY KEY,
-                    sender_id TEXT NOT NULL,
+                    owner_id TEXT NOT NULL,
                     description TEXT NOT NULL
                 )""")
     
@@ -78,12 +82,15 @@ def reset_database():
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
     cursor.execute("DROP TABLE IF EXISTS organizations")
+    cursor.execute("DROP TABLE IF EXISTS bank_accounts")
     cursor.execute("DROP TABLE IF EXISTS transactions")
     cursor.execute("DROP TABLE IF EXISTS users")
     cursor.execute("DROP TABLE IF EXISTS cards")
     cursor.execute("DROP TABLE IF EXISTS notes")
     cursor.execute("DROP TABLE IF EXISTS pending_accounts")
     setup()
+    cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, organizations, cards, super_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                   (str(uuid.uuid4()),"ziad_elhusiny","ziad",bcrypt.hashpw("12345678".encode("utf-8"),bcrypt.gensalt()).decode('utf-8'),"ziad@gmail.com",datetime.datetime.now(),str([]),str([]), True))
     conn.commit()
     conn.close()
 

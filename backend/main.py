@@ -98,6 +98,9 @@ def add_user(user: User):
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
         user_id = str(uuid.uuid4())
+        cursor.execute("SELECT id FROM users WHERE username = ?", (user.username,))
+        if cursor.fetchone():
+            return {"error": "Username already exists"}
         cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, organizations, cards) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     (user_id, user.username, user.display_name, encrypt_password(user.password), user.email, datetime.datetime.now(), "[]", "[]"))
         conn.commit()
@@ -164,15 +167,22 @@ def login(login_request: LoginRequest):
 
 @app.post("/new_organization/")
 def add_organization(form: Organization):
+    print("man")
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
+        cursor.execute("SELECT name FROM pending_accounts WHERE name = ?", (form.name,))
+        if cursor.fetchone():
+            raise fastapi.HTTPException(status_code=403, detail="Organization name already exists in pending accounts")
+        cursor.execute("SELECT name FROM organizations WHERE name = ?", (form.name,))
+        if cursor.fetchone():
+            raise fastapi.HTTPException(status_code=403, detail="Organization name already exists")
         cursor.execute("INSERT INTO pending_accounts (name, owner_id, description) VALUES (?, ?, ?)",
                     (form.name, form.owner_id, form.description))
         conn.commit()
         return {"message": "Organization request submitted successfully"}
     except Exception as e:
-        return {"error": str(e)}
+        raise fastapi.HTTPException(status_code=500, detail=str(e))
     finally:
         conn.close()
 

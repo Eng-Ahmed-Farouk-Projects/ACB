@@ -1,4 +1,4 @@
-const API_URL = "https://api.taskmaster.com/api/v1/";
+const API_URL = "http://127.0.0.1:8000/";
 
 document.addEventListener("DOMContentLoaded",async function(){
     let token = localStorage.getItem("token");
@@ -6,26 +6,46 @@ document.addEventListener("DOMContentLoaded",async function(){
         window.location.href = "../login/login.html";
         return;
     }
-    document.getElementById("create-organization-form").addEventListener("submit", async function (event){
+    document.getElementById("submit-btn").addEventListener("click", async function (event){
         event.preventDefault();
-        let name = document.getElementById("org-name").value;
-        let description = document.getElementById("org-description").value;
+        document.getElementById("submit-btn").disabled = true;
+        let name = document.getElementById("name").value;
+        let description = document.getElementById("description").value;
         try {
-            let response = await fetch("" + API_URL + "new_organization/",{
-                name: name,
-                description: description,
-                owner_id: localStorage.getItem("user_id")
+            let response = await fetch(API_URL + "new_organization/",{
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    description: description,
+                    owner_id: localStorage.getItem("user_id")
+                }),
+
             })
             let data = await response.json();
+
             if (response.status == 200){
-                
-                window.location.href = "../dashboard/dashboard.html";
+                message_area = document.getElementById("message-area");
+                message_area.innerHTML = data.message;
+                message_area.className = "message-area success";
+                setTimeout(() => {
+                    window.location.href = "../dashboard/dashboard.html";
+                }, 2000);
             }
-
-
+            else{
+                message_area = document.getElementById("message-area");
+                message_area.innerHTML = data.detail;
+                message_area.className = "message-area error";
+                document.getElementById("submit-btn").disabled = false;
+            }
         }
         catch (error){
-
+            message_area = document.getElementById("message-area");
+            message_area.innerHTML = "An error occurred while creating the organization";
+            message_area.className = "message-area error";
+            document.getElementById("submit-btn").disabled = false;
         }
     })
 })
