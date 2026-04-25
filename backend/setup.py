@@ -12,6 +12,7 @@ def setup():
                 CREATE TABLE IF NOT EXISTS organizations (
                     id TEXT PRIMARY KEY,
                     name TEXT NOT NULL,
+                    description TEXT NOT NULL,
                     balance REAL NOT NULL,
                     owner_id TEXT NOT NULL,
                     created_at DATETIME NOT NULL,

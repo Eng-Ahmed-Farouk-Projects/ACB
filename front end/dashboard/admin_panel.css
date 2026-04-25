@@ -1,0 +1,217 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #cdd3db;
+    color: #112038;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.side-bar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    background: linear-gradient(315deg, #0312b5 0%, #044c95 43%, #0ccddf 100%);
+    color: white;
+    height: 100vh;
+    left: 0;
+    top: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 30px 25px;
+    font-size: 25px;
+    font-weight: 750;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 20px 15px;
+    gap: 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.nav-item.active{
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin: 20px 15px 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.main {
+    margin-left: 300px;
+    padding: 30px;
+    flex: 1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.welcome-message h1{
+    font-size: 25px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+
+.content h2{
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid rgba(0,0,0,0.1);
+}
+
+.no-organizations {
+    text-align: center;
+    font-size: 15px;
+    color: #64748b;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 20px;
+    grid-column: 1 / -1;
+}
+
+.loading {
+    text-align: center;
+    font-size: 15px;
+    color: #64748b;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 20px;
+    grid-column: 1 / -1;
+}
+
+.loading::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e2e8f0;
+    border-top-color: #0312b5;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@media spin{
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.pending-organization {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.1);
+    transition: all 0.2s, box-shadow 0.2s;
+}
+
+.pending-organization h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f1a2c;
+    margin-bottom: 10px;
+}
+
+.pending-organization p {
+    font-size: 15px;
+    color: #64748b;
+    margin-bottom: 15px;
+}
+
+.approve-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    gap: 10px;
+    padding: 10px 20px;
+    background: #22c55e;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.2s;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.reject-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    gap: 10px;
+    padding: 10px 20px;
+    background: #e53e3e;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.2s;
+    cursor: pointer;
+}

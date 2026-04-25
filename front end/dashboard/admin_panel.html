@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link href="admin_panel.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="side-bar">
+            <div class="logo">
+                <span>ACB</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item"><span>Home</span></a>
+                <a href="dashboard.html#Cards" class="nav-item"><span>Cards</span></a>
+                <a href="profile.html" class="nav-item"><span>Profile</span></a>
+                <a href="admin_panel.html" class="nav-item active"><span>Admin Panel</span></a>
+            </nav>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+        <div class="main">
+            <div class="header">
+                <div class="welcome-message">
+                    <h1>Admin Panel</h1>
+                </div>
+            </div>
+            <div class="content">
+                <div class="actions">
+                    <div class="action">
+                        <h2>Manage pending organizations</h2>
+                        <div class="pending-organizations" id="pending-organizations">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="admin_panel.js"></script>
+</body>
+</html>

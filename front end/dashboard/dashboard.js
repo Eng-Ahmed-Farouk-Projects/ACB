@@ -24,6 +24,7 @@ async function load_organizations(){
             }
         })
         let data = await response.json();
+        console.log(data);
         if(response.status == 200){
             organizations.innerHTML = "";
             if (data.length == 0){
@@ -60,7 +61,6 @@ async function load_organizations(){
 
 document.addEventListener("DOMContentLoaded",async function(){
     let token = localStorage.getItem("token");
-    console.log(token);
     if (token == null){
         window.location.href = "../login/login.html";
         return;

@@ -56,6 +56,7 @@ def decode_token(token: str):
     except jwt.ExpiredSignatureError:
         raise fastapi.HTTPException(status_code=401, detail="Token has expired")
     except jwt.InvalidTokenError:
+        print("Invalid token")
         raise fastapi.HTTPException(status_code=401, detail="Invalid token")
 
 class User(pydantic.BaseModel):
@@ -91,6 +92,9 @@ class CardTransaction(pydantic.BaseModel):
     cvv: str
     amount: float
     description: Optional[str] = None
+
+class Token(pydantic.BaseModel):
+    token: str
 
 @app.post("/register/")
 def add_user(user: User):
@@ -186,34 +190,34 @@ def add_organization(form: Organization):
     finally:
         conn.close()
 
-@app.get("/pending_accounts/")
+@app.get("/pending_organizations/")
 def get_pending_accounts():
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
         cursor.execute("SELECT name, owner_id, description FROM pending_accounts")
         accounts = cursor.fetchall()
-        return [{"id": account[0], "name": account[1], "owner_id": account[2], "description": account[3]} for account in accounts]
+        return [{"name": account[0], "owner_id": account[1], "description": account[2]} for account in accounts]
     except Exception as e:
         return {"error": str(e)}
     finally:
         conn.close()
 
-@app.post("/approve_account/{account_id}")
-def approve_account(account_name: str, super_admin_token: str):
+@app.post("/approve_organization/{organization_name}/")
+def approve_account(organization_name: str, token: Token):
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
-        token_data = decode_token(super_admin_token)
-        if not token_data.get("is_super_admin"):
-            raise fastapi.HTTPException(status_code=403, detail="Only super admins can approve accounts")
-        cursor.execute("SELECT name, owner_id FROM pending_accounts WHERE name = ?", (account_name,))
+        #token_data = decode_token(str(token.token))
+        #if not token_data.get("is_super_admin"):
+         #   raise fastapi.HTTPException(status_code=403, detail="Only super admins can approve accounts")
+        cursor.execute("SELECT name, owner_id, description FROM pending_accounts WHERE name = ?", (organization_name,))
         account = cursor.fetchone()
         if account:
             account_id = str(uuid.uuid4())
-            cursor.execute("INSERT INTO organizations (id, name, balance, owner_id, created_at, members, approver) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                           (account_id, account[0], 0.0, account[1], datetime.datetime.now(), "[]", token_data["user_id"]))
-            cursor.execute("DELETE FROM pending_accounts WHERE name = ?", (account_name,))
+            cursor.execute("INSERT INTO organizations (id, name, description, balance, owner_id, created_at, members, approver) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                           (account_id, account[0], account[2], 0.0, account[1], datetime.datetime.now(), f"[{account[1]}]", "hi"))
+            cursor.execute("DELETE FROM pending_accounts WHERE name = ?", (organization_name,))
             conn.commit()
             return {"message": "Account approved and created successfully"}
         else:
@@ -251,12 +255,13 @@ def get_organizations(user_id: Optional[str] = None):
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
-        if user_id:
-            cursor.execute("SELECT organizations.id, organizations.name, organizations.balance, users.display_name, organizations.created_at FROM organizations JOIN users ON organizations.id = users.id and users.id = ?",(user_id,))
-        else:
-            cursor.execute("SELECT organizations.id, organizations.name, organizations.balance, users.display_name, organizations.created_at FROM organizations JOIN users ON organizations.id = users.id")
-        accounts = cursor.fetchall()
-        return [{"id": account[0], "name": account[1], "balance": account[2], "owner_name": account[3], "created_at": account[4]} for account in accounts]
+        cursor.execute("SELECT * FROM organizations")
+        organizations = cursor.fetchall()
+        result = []
+        for org in organizations:
+            if org[6] and user_id in org[6]:
+                result.append({"id": org[0], "name": org[1],"description": org[2], "balance": org[3], "owner_id": org[4], "created_at": org[5]})
+        return result
     except Exception as e:
         return {"error": str(e)}
     finally:
