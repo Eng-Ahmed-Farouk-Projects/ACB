@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization</title>
+    <link href="organization.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="side-bar">
+            <div class="logo">
+                <span>ACB</span>
+            </div>
+            <div class="nav-menu">
+                <a href="../dashboard/dashboard.html" class="nav-item">Home</a>
+                <a href="#" class="nav-item active">Organization</a>
+                <a href="../dashboard/dashboard.html#cards" class="nav-item">Cards</a>
+                <a href="../dashboard/profile.html" class="nav-item">Profile</a>
+            </div>
+            <button class="logout-btn">Logout</button>
+        </div>
+        <div class="main">
+            <div class="header">
+                <div class="welcome-message">
+                    <h1 id="organization-name">Organization</h1>
+                </div>
+            </div>
+            <div class="content">
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-info">
+                            <h3>Balance: </h3>
+                            <p class="stat-value" id="balance">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-info">
+                            <h3>Members: </h3>
+                            <p class="stat-value" id="members"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="transactions">
+                    <div class="transaction-header">
+                        <h2>Recent Transactions</h2>
+                        <button class="view-all-btn" id="view-all-btn">View all</button>
+                    </div>
+                    <div class="recent-transactions" id="recent-transactions">
+                        <div class="loading">Loading transactions ..</div>
+                    </div>
+                </div>
+                <div id="error-state" class="error-container" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>Organization Not Found</h2>
+                    <p>The organization you're looking for doesn't exist or you don't have access to it.</p>
+                    <a href="../dashboard/dashboard.html" class="back-btn">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="organization.js"></script>
+</body>
+</html>

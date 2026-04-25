@@ -232,15 +232,17 @@ def get_bank_account(account_id: str):
     try:
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
-        cursor.execute("SELECT organizations.id, organizations.name, organizations.balance, users.display_name, organizations.created_at FROM organizations JOIN users ON organizations.id = users.id WHERE organizations.id = ?", (account_id,))
+        cursor.execute("SELECT * FROM organizations where id = ?", (account_id,))
         account = cursor.fetchone()
         if account:
             return {
                 "id": account[0],
                 "name": account[1],
-                "balance": account[2],
-                "owner_name": account[3],
-                "created_at": account[4]
+                "description": account[2],
+                "balance": account[3],
+                "owner_id": account[4],
+                "created_at": account[5],
+                "members": account[6]
             }
         else:
             return {"error": "Bank account not found"}
@@ -249,6 +251,28 @@ def get_bank_account(account_id: str):
     finally:
         conn.close()
 
+@app.get("/organization/{account_id}/members/")
+def get_members(account_id: str):
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT members FROM organizations where id = ?", (account_id,))
+        members = cursor.fetchone()
+        result = []
+        print(members)
+        print(members[0])
+        for member in members[0][1:-1].split(","):
+            print(member)
+            cursor.execute("SELECT username FROM users where id = ?", (member,))
+            result.append(cursor.fetchone())
+        if members:
+            return {"members": result}
+        else:
+            return {"error": "Organization not found"}
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
 
 @app.get("/users/{user_id}/organizations/")
 def get_organizations(user_id: Optional[str] = None):
@@ -308,6 +332,27 @@ def get_transaction(transaction_id: str):
             }
         else:
             return {"error": "Transaction not found"}
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+@app.get("/organization/{account_id}/transactions/")
+def get_organization_transactions(account_id: str):
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM transactions WHERE sender_bank_account_id = ? OR receiver_bank_account_id = ?", (account_id, account_id))
+        transactions = cursor.fetchall()
+        return [{
+            "id": transaction[0],
+            "title": transaction[1],
+            "sender_bank_account_id": transaction[2],
+            "sender_user_id": transaction[3],
+            "receiver_bank_account_id": transaction[4],
+            "amount": transaction[5],
+            "timestamp": transaction[6]
+        } for transaction in transactions]
     except Exception as e:
         return {"error": str(e)}
     finally:
