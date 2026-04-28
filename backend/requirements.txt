@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-mutlipart
+pydantic
+python-dotenv
+sqlite3
+uuid
+bcrypt
+faker
+PyJWT
