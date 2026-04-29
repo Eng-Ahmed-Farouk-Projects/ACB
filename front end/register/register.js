@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/";
+const API_URL = "https://acb-production.up.railway.app/";
 const msg_area = document.getElementById("message-area");
 
 async function register(){
