@@ -4,6 +4,9 @@ import bcrypt
 import uuid
 import datetime
 
+sqlite3.register_adapter(datetime.datetime, lambda dt: dt.isoformat())
+sqlite3.register_converter("timestamp", lambda v: datetime.datetime.fromisoformat(v.decode()))
+
 def setup():
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()

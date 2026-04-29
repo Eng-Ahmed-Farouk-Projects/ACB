@@ -15,6 +15,9 @@ fake = faker.Faker()
 SECRET_KEY = os.getenv("secret_key")
 ALGORITHM = os.getenv("algorithm")
 
+sqlite3.register_adapter(datetime.datetime, lambda dt: dt.isoformat())
+sqlite3.register_converter("timestamp", lambda v: datetime.datetime.fromisoformat(v.decode()))
+
 def encrypt_password(password: str):
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
