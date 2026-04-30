@@ -130,6 +130,10 @@ python -m http.server 5500
 - open: `http://localhost:5500/login/login.html`
 
 ---
+# Logo 
+I made this Logo using Canva but Didn't put it on the Website becuase this is the 1st logo Draft 
+<img width="2000" height="2000" alt="ACB Branding (1)" src="https://github.com/user-attachments/assets/f6cae190-7a42-4ee3-b9f3-63c7a00a8b4d" />
+
 # Author
 this is Platform Made By Ahmed Farouk
 Passionate about STEAM, Entrepreneurship 
