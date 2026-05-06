@@ -76,9 +76,6 @@ document.addEventListener("DOMContentLoaded",async function(){
         let data = await response.json();
         if(response.status == 200){
             document.getElementById("display-name").innerHTML = data.display_name;
-            if (data.is_super_admin){
-                document.getElementById("nav-menu").innerHTML += "<a href='admin_panel.html' class='nav-item'><span>Admin Panel</span></a>"
-            }
             await load_organizations();
         }
         else{
