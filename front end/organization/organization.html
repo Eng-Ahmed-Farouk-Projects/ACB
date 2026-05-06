@@ -15,8 +15,6 @@
             <div class="nav-menu">
                 <a href="../dashboard/dashboard.html" class="nav-item">Home</a>
                 <a href="#" class="nav-item active">Organization</a>
-                <a href="../dashboard/dashboard.html#cards" class="nav-item">Cards</a>
-                <a href="../dashboard/profile.html" class="nav-item">Profile</a>
             </div>
             <button class="logout-btn" id="logout-btn">Logout</button>
         </div>
@@ -50,8 +48,8 @@
                         <div class="loading">Loading transactions ..</div>
                     </div>
                     <div class="donate">
-                        <button class="donate-btn" id="donate-btn">Donate</button>
-                        <button class="transfer-btn" id="transfer-btn">Transfer Between Accounts</button>
+                        <button class="donate-btn" id="donate-btn">Deposit</button>
+                        <button class="transfer-btn" id="transfer-btn">Withdraw</button>
                     </div>
                 </div>
                 <div id="error-state" class="error-container" style="display: none;">
@@ -88,7 +86,7 @@
     <div id="transfer-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Transfer Money</h3>
+                <h3>Take Money from Account (withdraw)</h3>
                 <button class="close-modal close-transfer-modal">&times;</button>
             </div>
             <div class="modal-body">
