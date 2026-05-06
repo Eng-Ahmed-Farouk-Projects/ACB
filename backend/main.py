@@ -179,58 +179,34 @@ def add_organization(form: Organization):
     try:
         conn = sqlite3.connect(database_path)
         cursor = conn.cursor()
-        cursor.execute("SELECT name FROM pending_accounts WHERE name = ?", (form.name,))
-        if cursor.fetchone():
-            raise fastapi.HTTPException(status_code=403, detail="Organization name already exists in pending accounts")
         cursor.execute("SELECT name FROM organizations WHERE name = ?", (form.name,))
         if cursor.fetchone():
             raise fastapi.HTTPException(status_code=403, detail="Organization name already exists")
-        cursor.execute("INSERT INTO pending_accounts (name, owner_id, description) VALUES (?, ?, ?)",
-                    (form.name, form.owner_id, form.description))
+        org_id = str(uuid.uuid4())
+        members_json = f'["{form.owner_id}"]'
+        cursor.execute(
+            """INSERT INTO organizations 
+               (id, name, description, balance, owner_id, created_at, members, approver) 
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+          (     org_id,
+                form.name,
+                form.description,
+                0.0,                     
+                form.owner_id,
+                datetime.datetime.now(),
+                members_json,
+                "auto"       ))
         conn.commit()
-        return {"message": "Organization request submitted successfully"}
+        return {
+            "message": "Organization created successfully",
+            "organization_id": org_id,
+            "name": form.name,
+            "owner_id": form.owner_id
+        }
     except Exception as e:
         raise fastapi.HTTPException(status_code=500, detail=str(e))
     finally:
         conn.close()
-
-@app.get("/pending_organizations/")
-def get_pending_accounts():
-    try:
-        conn = sqlite3.connect(database_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT name, owner_id, description FROM pending_accounts")
-        accounts = cursor.fetchall()
-        return [{"name": account[0], "owner_id": account[1], "description": account[2]} for account in accounts]
-    except Exception as e:
-        return {"error": str(e)}
-    finally:
-        conn.close()
-
-@app.post("/approve_organization/{organization_name}/")
-def approve_account(organization_name: str, token: Token):
-    try:
-        conn = sqlite3.connect(database_path)
-        cursor = conn.cursor()
-        #token_data = decode_token(str(token.token))
-        #if not token_data.get("is_super_admin"):
-         #   raise fastapi.HTTPException(status_code=403, detail="Only super admins can approve accounts")
-        cursor.execute("SELECT name, owner_id, description FROM pending_accounts WHERE name = ?", (organization_name,))
-        account = cursor.fetchone()
-        if account:
-            account_id = str(uuid.uuid4())
-            cursor.execute("INSERT INTO organizations (id, name, description, balance, owner_id, created_at, members, approver) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                           (account_id, account[0], account[2], 0.0, account[1], datetime.datetime.now(), f"[{account[1]}]", "hi"))
-            cursor.execute("DELETE FROM pending_accounts WHERE name = ?", (organization_name,))
-            conn.commit()
-            return {"message": "Account approved and created successfully"}
-        else:
-            return {"error": "Pending account not found"}
-    except Exception as e:
-        return {"error": str(e)}
-    finally:
-        conn.close()
-
 @app.get("/organizations/{account_id}/")
 def get_bank_account(account_id: str):
     try:
