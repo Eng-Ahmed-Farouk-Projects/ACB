@@ -15,7 +15,7 @@ import stripe
 fake = faker.Faker()
 SECRET_KEY = os.getenv("secret_key")
 ALGORITHM = os.getenv("algorithm")
-stripe.api_key = os.getenv("SSK")
+stripe.api_key = os.getenv("stripe_api_key")
 
 sqlite3.register_adapter(datetime.datetime, lambda dt: dt.isoformat())
 sqlite3.register_converter("timestamp", lambda v: datetime.datetime.fromisoformat(v.decode()))

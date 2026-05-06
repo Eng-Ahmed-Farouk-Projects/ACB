@@ -113,10 +113,6 @@ async function new_transaction(){
         showToast("Please enter a valid amount", "error");
         return;
     }
-    if (amount < 0.5){
-        showToast("Minimum donation amount is $0.5", "error");
-        return;
-    }
 
     try {
         let response = await fetch(API_URL + "stripe-checkout/", {
@@ -129,10 +125,9 @@ async function new_transaction(){
                 title: description,
                 token: token,
                 organization_id: org_id,
-                user_id: localStorage.getItem("user_id"),
-                amount: amount*100,
-                sucess: window.location.origin + "ACB/front%20end/organization/organization.html?org_id=" + org_id + "&status=sucess",
-                fail: window.location.origin + "ACB/front%20end/organization/organization.html?org_id=" + org_id + "&status=fail"
+                amount: amount,
+                sucess: window.location.origin + "/organization/organization.html?org_id=" + org_id + "&status=sucess",
+                fail: window.location.origin + "/organization/organization.html?org_id=" + org_id + "&status=fail"
             })
         })
         let data = await response.json();
