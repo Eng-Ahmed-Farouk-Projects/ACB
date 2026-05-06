@@ -14,15 +14,6 @@ import faker
 fake = faker.Faker()
 SECRET_KEY = os.getenv("secret_key")
 ALGORITHM = os.getenv("algorithm")
-<<<<<<< HEAD
-<<<<<<< HEAD
-stripe.api_key = os.getenv("SSK")
-=======
->>>>>>> parent of 470b8af (added stripe integration)
-=======
-stripe.api_key = os.getenv("stripe_api_key")
->>>>>>> parent of b0def64 (fixed payment issues)
-
 sqlite3.register_adapter(datetime.datetime, lambda dt: dt.isoformat())
 sqlite3.register_converter("timestamp", lambda v: datetime.datetime.fromisoformat(v.decode()))
 
@@ -109,7 +100,6 @@ class CardTransaction(pydantic.BaseModel):
 class Token(pydantic.BaseModel):
     token: str
 
-<<<<<<< HEAD
 class StripeCheckout(pydantic.BaseModel):
     amount: int
     organization_id: str
@@ -118,8 +108,6 @@ class StripeCheckout(pydantic.BaseModel):
     sucess: str
     fail: str
 
-=======
->>>>>>> parent of 470b8af (added stripe integration)
 @app.post("/register/")
 def add_user(user: User):
     try:
@@ -467,94 +455,3 @@ def spend(card: CardTransaction):
         return {"error": str(e)}
     finally:
         conn.close()
-
-
-<<<<<<< HEAD
-@app.post("/stripe-checkout/")
-async def checkout(sc: StripeCheckout):
-    token = sc.token
-    try:
-        payload = decode_token(token)
-        if payload:
-            session = stripe.checkout.Session.create(
-                line_items=[{
-                    "quantity": 1,
-                    "price_data": {
-                        "unit_amount": sc.amount,
-                        "currency": "usd",
-                        "product_data":{
-                            "name": f"Donation to Organization {sc.organization_id}"
-                        },
-                    }
-                }],
-                mode="payment",
-                metadata={
-                    "organization_id": sc.organization_id,
-                    "user_id": payload["user_id"],
-                    "title": sc.title,
-                },
-                success_url=sc.sucess,
-                cancel_url=sc.fail
-            )
-        return {"url": session.url, "id": session.id}
-    except Exception as e:
-        print(str(e))
-        raise fastapi.HTTPException(status_code=500, detail=str(e))
-
-@app.post("/stripe-webhook/")
-async def webhook(request):
-    body = await request.body()
-    signiture = request.headers.get("Stripe-Signature")
-
-    try:
-        ev = stripe.Webhook.construct_event(
-            body, signiture, os.getenv("SWHK")
-        )
-    except ValueError:
-        raise fastapi.HTTPException(status_code=400)
-    except stripe.error.SignatureVerificationError:
-        raise fastapi.HTTPException(status_code=400)
-    
-    if body["type"] == "checkout.session.completed":
-        amount = body["data"]["object"]["amount_total"]/100
-        organization_id = body["data"]["object"]["metadata"]["organization_id"]
-        title = body["data"]["object"]["metadata"]["title"]
-        user_id = body["data"]["object"]["metadata"]["user_id"]
-        conn = sqlite3.connect(database_path)
-        cursor = conn.cursor()
-        transaction_id = uuid.uuid4()
-        cursor.execute("INSERT INTO transactions (id, title, sender_bank_account_id, sender_user_id, receiver_bank_account_id, amount, timestamp, notes, receipts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                       (transaction_id, title, "outside", user_id, organization_id, amount, datetime.datetime.now(), "[]", "[]"))
-        cursor.execute("UPDATE organizations SET balance = balance + ? WHERE id = ?", (amount, organization_id))
-        conn.commit()
-        conn.close()
-    return {"status":"sucess"}
-
-
-
-@app.post("/stripe-webhook-thin/")
-async def webhook_thin(request):
-    body = await request.body()
-    signiture = request.headers.get("Stripe-Signature")
-
-    try:
-        ev = stripe.Webhook.construct_event(
-            body, signiture, os.getenv("SWHK-thin")
-        )
-    except ValueError:
-        raise fastapi.HTTPException(status_code=400)
-    except stripe.error.SignatureVerificationError:
-        raise fastapi.HTTPException(status_code=400)
-    
-    if body["type"] == "checkout.session.completed":
-        amount = body["data"]["object"]["amount_total"]/100
-        organization_id = body["data"]["object"]["metadata"]["organization_id"]
-        conn = sqlite3.connect(database_path)
-        cursor = conn.cursor()
-        cursor.execute("UPDATE organizations SET balance = balance + ? WHERE id = ?", (amount, organization_id))
-        conn.commit()
-        conn.close()
-    return {"status":"sucess"}
-
-=======
->>>>>>> parent of 470b8af (added stripe integration)
