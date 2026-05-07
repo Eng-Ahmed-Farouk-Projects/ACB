@@ -3,129 +3,23 @@
     margin: 0;
     box-sizing: border-box;
 }
+.modal-content {
 
-body {
-    font-family: 'Inter' sans-serif;
-    background: #cdd3db;
-    color: #112038;
+    
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 450px;
+    animation: slideIn 0.3s;
+    
 }
-
-.container {
-    display: flex;
-    min-height: 100vh;
-}
-
-.side-bar {
-    position: fixed;
-    width: 280px;
-    background: linear-gradient(315deg, #0312b5 0%, #044c95 43%, #0ccddf 100%);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    left: 0;
-    top: 0;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 30px 25px;
-    font-size: 25px;
-    font-weight: 750;
-    border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
-}
-
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 20px 15px;
-    gap: 10px;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 15px;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    border-radius: 10px;
-    transition: all 0.3s;
-}
-
-.nav-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.nav-item.active {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-
-.logout-btn{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 20px 15px 30px;
-    padding: 10px 15px;
-    background: rgba(255,255,255,0.15);
-    border: none;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s;
+.transaction .title {
+    margin-bottom: 10px;
     font-size: 15px;
-}
-
-.logout-btn:hover {
-    background: rgba(255,255,255,0.2);
-}
-
-.main {
-    margin-left: 300px;
-    padding: 20px;
-    flex: 1;
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.welcome-message h1{
-    font-size: 25px;
-    font-weight: 750;
-    color: #19273d;
-    margin-bottom: 5px;
-}
-
-.content h2{
-    font-size: 25px;
-    font-weight: 700;
-    color: #19273d;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #19273d;
-}
-
-.stats {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 35px;
-}
-
-.stat-item {
-    background: rgba(255,255,255,0.15);
-    border-radius: 15px;
-    border: none;
-    padding: 15px;
-    flex: 1;
+    
+    font-weight: 650;
+    color: #0b182e;
+    
 }
 
 .stat-info {
@@ -133,95 +27,32 @@ body {
     flex-direction: column;
     gap: 10px;
 }
-
-.stat-info h3 {
-    font-size: 15px;
-    color: #19273d;
+.nav-item.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
 }
-
-.stat-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: #1e314e;
-}
-
-.transactions {
-    background: rgba(255,255,255,0.15);
-    border-radius: 15px;
-    padding: 15px;
-}
-
-.transaction-header {
+.member {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.transaction-header h2 {
-    font-size: 25px;
-    font-weight: 750;
-    color: #0c1a31;
-}
-
-.recent-transactions {
-    display: flex;
-    flex-direction: column;
     gap: 15px;
-    margin-bottom: 30px;
+    align-items: center;
+}
+.modal-body {
+    padding: 25px;
 }
 
-.transaction {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    transition: all 0.3s ease;
-    border-left: 5px solid #b93834;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-    position: relative;
-}
-
-.transaction:hover {
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.transaction.incoming {
-    border-left-color: #0eda6a;
-}
-
-.transaction h3 {
-    display: inline-block;
-    margin-bottom: 10px;
-    font-size: 20px;
-    font-weight: 700;
-    color: #bb2b26;
-}
-
-.transaction.incoming h3 {
-    color: #0eda6a;
-}
-
-.transaction .title {
-    margin-bottom: 10px;
-    font-size: 15px;
-    font-weight: 650;
-    color: #0b182e;
+.form-group input:focus{
     
+    outline: none;
+    border-color: #000000;
 }
 
-.transaction .detail {
-    display: inline-block;
-    font-size: 10px;
-    color: #526a8b;
-    margin-bottom: 5px;
-    padding: 5px 10px;
-    font-family: monospace;
-    background: white;
-    border-radius: 10px;
+.container {
+    display: flex;
+    min-height: 100vh;
 }
 
 .transaction .date {
+    
     display: flex;
     gap: 5px;
     align-items: center;
@@ -229,53 +60,8 @@ body {
     color: #4e688b;
     margin-top: 10px;
 }
-
-.no-transactions {
-    text-align: center;
-    padding: 35px;
-    background: white;
-    border-radius: 15px;
-    color: #4f6788;
-    font-size: 15px;
-}
-
-.view-all-btn {
-    background: #10203b;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 190px;
-}
-
-.members {
-    background: rgba(255,255,255,0.2);
-    border-radius: 15px;
-    margin-top: 30px;
-    padding: 20px;
-}
-
-.members-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.member {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
 .modal {
+    
     display: none;
     position: fixed;
     justify-content: center;
@@ -287,121 +73,25 @@ body {
     background: rgba(0,0,0,0.6);
     z-index: 1000;
 }
-
-.modal.show {
+.logo {
     display: flex;
-}
-
-.modal-content {
-    background: white;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 450px;
-    animation: slideIn 0.3s;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 20px 25px;
-    border-bottom: 1px solid white;
+    gap: 12px;
+    padding: 30px 25px;
+    font-size: 25px;
+    font-weight: 750;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
 }
-
-.modal-header h3 {
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    font-size: 30px;
-    cursor: pointer;
-    color: #4f6b92;
-}
-
-.modal-body {
-    padding: 25px;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 500;
-}
-
-.form-group input, .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid white;
-    border-radius: 10px;
-    font-size: 15px;
-}
-
-.form-group input:focus{
-    outline: none;
-    border-color: #0011d1;
-} 
-
-.form-group select:focus {
-    outline: none;
-    border-color: #000fb6;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 20px 25px;
-    border-top: 1px solid white;
-}
-
-.btn-cancel, .btn-submit {
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.btn-cancel {
-    background: white;
-    color: #4f698f;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.btn-submit {
-    background: linear-gradient(135deg, #0618e0 0%, #78d5dd 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: 500;
+.welcome-message h1{
     
+    font-size: 25px;
+    font-weight: 750;
+    color: #19273d;
+    margin-bottom: 5px;
 }
-
 @media (max-width: 968px) {
     .side-bar {
+        
         width: 80px;
     }
 
@@ -421,7 +111,229 @@ body {
         margin-left: 100px;
     }
 }
+.btn-submit {
+    background: linear-gradient(135deg, #000000 0%, #d0f5f8 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 500;
+    
+}
+.form-group {
+    margin-bottom: 25px;
+}
+.transfer-btn {
+    background: linear-gradient(135deg, #000000 0%, #d0f5f8 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    
+    transition: all 0.3s;
+}
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+.stats {
+    display: flex;
+    
+    gap: 20px;
+    margin-bottom: 35px;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid white;
+}
 
+.transaction.incoming h3 {
+    color: #0eda6a;
+}
+.transaction h3 {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #bb2b26;
+}
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 190px;
+}
+.transaction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.view-all-btn {
+    background: #10203b;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.modal.show {
+    display: flex;
+}
+.side-bar {
+    position: fixed;
+    width: 280px;
+    background: linear-gradient(315deg, #5c4e4e 0%, #19191a 43%, #000000 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    left: 0;
+    top: 0;
+}
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+
+        
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.btn-cancel {
+    background: white;
+    color: #4f698f;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.transaction {
+    
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    
+    border-left: 5px solid #b93834;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+.form-group select:focus {
+    outline: none;
+    border-color: #000fb6;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+.logout-btn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 15px 30px;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 15px;
+}
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 20px 15px;
+    gap: 10px;
+}
+.content h2{
+    font-size: 25px;
+    font-weight: 700;
+    color: #19273d;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #19273d;
+}
+.members-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.donate-btn {
+    background: linear-gradient(135deg, #000000 0%, #d0f5f8 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin-left: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+body {
+    font-family: sans-serif;
+    background: #cdd3db;
+    color: #112038;
+}
+.transaction:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.transaction-header h2 {
+    font-size: 25px;
+    font-weight: 750;
+    color: #0c1a31;
+}
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px 25px;
+    border-top: 1px solid white;
+}
+.members {
+    background: rgba(255,255,255,0.2);
+    border-radius: 15px;
+    margin-top: 30px;
+    padding: 20px;
+}
+.nav-item {
+    
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    font-size: 15px;
+}
 @media (max-width: 640px) {
     .stats-grid {
         grid-template-columns: 1fr;
@@ -432,37 +344,89 @@ body {
         text-align: center;
     }
 }
-
-.transfer-btn {
-    background: linear-gradient(135deg, #0618e0 0%, #78d5dd 100%);
-    color: white;
+.stat-item {
+    background: rgba(255,255,255,0.15);
+    border-radius: 15px;
     border: none;
-    padding: 10px 20px;
-    margin-left: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
+    padding: 15px;
+    flex: 1;
 }
-
-.transfer-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(10, 25, 192, 0.3);
-}
-
-.donate-btn {
-    background: linear-gradient(135deg, #0618e0 0%, #78d5dd 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    margin-left: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
 .donate-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 10px rgba(10, 25, 192, 0.3);
 }
+.transfer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(10, 25, 192, 0.3);
+}
+.main {
+    margin-left: 300px;
+    padding: 20px;
+    flex: 1;
+}
+.transaction.incoming {
+    border-left-color: #0eda6a;
+}
+.transaction .detail {
+    display: inline-block;
+    font-size: 10px;
+    color: #526a8b;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    font-family: monospace;
+    background: white;
+    border-radius: 10px;
+}
+.logout-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+.btn-cancel, .btn-submit {
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e314e;
+}
+.modal-header h3 {
+    font-size: 20px;
+    font-weight: 600;
+}
+.recent-transactions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.transactions {
+    background: rgba(255,255,255,0.15);
+    border-radius: 15px;
+    padding: 15px;
+}
 
 
+
+
+.stat-info h3 {
+    font-size: 15px;
+    color: #19273d;
+}
+.no-transactions {
+    
+    text-align: center;
+    padding: 35px;
+    background: white;
+    border-radius: 15px;
+    color: #4f6788;
+    font-size: 15px;
+}
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #4f6b92;
+}
