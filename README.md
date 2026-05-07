@@ -1,6 +1,5 @@
 # ACB 
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 [![Railway](https://img.shields.io/badge/deployed%20on-Railway-131415.svg)](https://railway.app/)
@@ -115,11 +114,17 @@ The API will be available at `http://localhost:8000`
 ### Frontend Setup
 
 1. **go to frontend Folder**
+
+Return to ACB folder
 ```bash
-cd ../front\ end
+cd ..
+```
+Go to Front end Folder
+```bash
+cd "front end"
 ```
 
-3. **Open the application**
+2. **Open the application**
 Open with a local server:
 ```bash
 # Using Python
