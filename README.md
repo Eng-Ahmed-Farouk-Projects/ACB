@@ -1,4 +1,4 @@
-# ACB 
+# ACB - Organization Finances Management System
 
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
@@ -6,20 +6,20 @@
 
 <img width="1366" height="642" alt="image" src="https://github.com/user-attachments/assets/d95a429d-2d6b-4068-a0ba-67bb9eb94ab7" />
 
-**Adapt Community Bank (Wink Wink) . a platform to support Startups to manage their Money in Egypt Under a legal framework.**
+**This is a Platform system for Founders who wants to show their team members their organization Finance and turn it to a Financilly Transparent Organization**
 ---
 
 ## Features
 
-### For Organization Members
-- **Organization Dashboard** – See balance, members, and transactions
-- **Internal Transfers** – Send and receive money between different Organization
-- **Donation** – Donate funds from another source
+### For Organization Owner
+- **Add Transfers** – Add a deposit (donation / fund etc.) and a Withdraw (Fund for other org / buy things etc.)
+  
 - **Transactions** – See the Full history of Recent Transactions
   
-### For Super Admins
-- **Organization Approvals** – Review and approve or reject new organizations
-
+### For Members
+- **Organization Dashboard** – See balance, members, and transactions
+  
+- **Transactions** – See the Full history of Recent Transactions
 
 ---
 
@@ -54,10 +54,6 @@ ACB/
 │   │   ├── create_organization.html
 │   │   ├── create_organization.css
 │   │   └── create_organization.js
-│   └── super_admin/         # Super admin panel for approvals
-│       ├── super_admin.html
-│       ├── super_admin.css
-│       └── super_admin.js
 └── README.md # that's what yo are reading right now!
 
 ```
@@ -66,13 +62,8 @@ ACB/
 ## How to try 
 go to : https://eng-ahmed-farouk-backup.github.io/ACB/front%20end/login/login.html
 
-if you want to log in as a suped admin :
+Make an Account and create an Organization then add transactions and share your organization link to your members to see the transactions history 
 
-username : ziad_elhusiny
-
-(thanks for allowing me to use your name lol) -(I will use Max name in the next project like I did in the last one)
-
-Password : 12345678
 
 that's it have fun !
 
@@ -100,10 +91,6 @@ pip install -r requirements.txt
 ```bash
 python setup.py
 ```
-default super admin account:
-- Username: `ziad_elhusiny` # my Best friend's name , Love uuuuuuuuuuu!
-- Password: `12345678`
-
 6. **Run the backend server**
 ```bash
 uvicorn main:app --reload --port 8000
@@ -111,29 +98,9 @@ uvicorn main:app --reload --port 8000
 
 The API will be available at `http://localhost:8000`
 
-### Frontend Setup
 
-1. **go to frontend Folder**
-
-Return to ACB folder
-```bash
-cd ..
-```
-Go to Front end Folder
-```bash
-cd "front end"
-```
-
-2. **Open the application**
-Open with a local server:
-```bash
-# Using Python
-python -m http.server 5500
-
-# Using VS Code Live Server (port 5500)
-```
-- open: `http://localhost:5500/login/login.html`
-
+7. **Open the application**
+run login.html in your browser and have fun !
 ---
 # Logo 
 I made this Logo using Canva but Didn't put it on the Website becuase this is the 1st logo Draft 
