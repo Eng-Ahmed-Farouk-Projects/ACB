@@ -208,163 +208,91 @@ document.addEventListener("DOMContentLoaded", function() {
             window.location.href = "../login/login.html"
         })
     }
-    setupTransferModal();
-
+    setupSimpleWithdraw();
 });
-
-async function loadAccountsForTransfer() {
-    let token = localStorage.getItem("token");
-    let user_id = localStorage.getItem("user_id");
-    
-    try {
-        let response = await fetch(API_URL + "users/" + user_id + "/organizations/", {
-            method: "GET",
-            headers: {
-                "Authorization": "Token " + token
-            }
-        });
-        
-        let data = await response.json();
-        
-        let senderSelect = document.getElementById("sender-account");
-        let receiverSelect = document.getElementById("receiver-account");
-        
-        senderSelect.innerHTML = '<option value="">Select account</option>';
-        receiverSelect.innerHTML = '<option value="">Select account</option>';
-        
-        let outsideOption = document.createElement("option");
-        outsideOption.value = "outside";
-        outsideOption.textContent = "Outside Bank (External Transfer)";
-        senderSelect.appendChild(outsideOption);
-        
-        for (let org of data) {
-            let senderOption = document.createElement("option");
-            senderOption.value = org.id;
-            senderOption.textContent = `${org.name} (Balance: $${org.balance.toLocaleString()})`;
-            senderSelect.appendChild(senderOption);
-            
-            let receiverOption = document.createElement("option");
-            receiverOption.value = org.id;
-            receiverOption.textContent = `${org.name}`;
-            receiverSelect.appendChild(receiverOption);
-        }
-        
-        let urlParams = new URLSearchParams(window.location.search);
-        let currentOrgId = urlParams.get("org_id");
-        if (currentOrgId) {
-            receiverSelect.value = currentOrgId;
-        }
-    } catch (error) {
-        console.error("Error loading accounts:", error);
+// I WANT TO SLEEEEEEEEEEEEEEEEEEEEEEEEP
+function setupSimpleWithdraw() {
+    const withdrawBtn = document.getElementById("transfer-btn");
+    if (!withdrawBtn) return;
+    const modal = document.getElementById("transfer-modal");
+    if (modal) {
+        const senderGroup = document.querySelector("#sender-account")?.closest(".form-group");
+        const receiverGroup = document.querySelector("#receiver-account")?.closest(".form-group");
+        if (senderGroup) senderGroup.style.display = "none";
+        if (receiverGroup) receiverGroup.style.display = "none";
+        const modalHeader = modal.querySelector(".modal-header h3");
+        if (modalHeader) modalHeader.innerText = "Withdraw Money";
+        const submitBtn = document.getElementById("confirm-transfer");
+        if (submitBtn) submitBtn.innerText = "Withdraw";
     }
+    withdrawBtn.addEventListener("click", () => {
+        const titleInput = document.getElementById("transfer-title");
+        const amountInput = document.getElementById("transfer-amount");
+        if (titleInput) titleInput.value = "";
+        if (amountInput) amountInput.value = "";
+        modal.classList.add("show");
+    });
+    const confirmBtn = document.getElementById("confirm-transfer");
+    if (confirmBtn) {
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        newConfirmBtn.addEventListener("click", () => {
+            performWithdrawal();
+        });
+    }
+    document.querySelectorAll(".close-transfer-modal").forEach(btn => {
+        btn.addEventListener("click", () => {
+            modal.classList.remove("show");
+            // bruh it's 3 AM
+        });
+    });
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.classList.remove("show");     } 
+    });
 }
-
-async function transferMoney() {
+async function performWithdrawal() {
     const title = document.getElementById("transfer-title").value;
-    const senderId = document.getElementById("sender-account").value;
-    const receiverId = document.getElementById("receiver-account").value;
     const amount = parseFloat(document.getElementById("transfer-amount").value);
     const token = localStorage.getItem("token");
     const user_id = localStorage.getItem("user_id");
-    
+    const urlParams = new URLSearchParams(window.location.search);
+    const org_id = urlParams.get("org_id");
+
     if (!title) {
         showToast("Please enter a title", "error");
         return;
     }
-    
-    if (!senderId) {
-        showToast("Please select a sender account", "error");
-        return;
-    }
-    
-    if (!receiverId) {
-        showToast("Please select a receiver account", "error");
-        return;
-    }
-    
-    if (senderId === receiverId && senderId !== "outside") {
-        showToast("Cannot transfer to the same account", "error");
-        return;
-    }
-    
     if (!amount || amount <= 0) {
         showToast("Please enter a valid amount", "error");
         return;
     }
-
-    if (senderId !== "outside") {
-        const senderSelect = document.getElementById("sender-account");
-        const selectedOption = senderSelect.options[senderSelect.selectedIndex];
-        const balanceMatch = selectedOption.text.match(/Balance: \$([\d,]+\.?\d*)/);
-        
-        if (balanceMatch) {
-            const currentBalance = parseFloat(balanceMatch[1].replace(/,/g, ''));
-            if (currentBalance < amount) {
-                showToast(`Insufficient funds! Current balance: $${currentBalance.toFixed(2)}`, "error");
-                return;
-            }
-        }
-    }
-    
-    document.getElementById("transfer-modal").classList.remove("show");
-    
     try {
         let response = await fetch(API_URL + "new_transaction/", {
             method: "POST",
             headers: {
                 "Authorization": "Token " + token,
                 "Content-Type": "application/json"
-            },
+},
             body: JSON.stringify({
                 title: title,
-                sender_bank_account_id: senderId,
+                sender_bank_account_id: org_id,
                 sender_user_id: user_id,
-                receiver_bank_account_id: receiverId,
-                amount: amount
-            })
+                receiver_bank_account_id: "outside",
+                amount: amount}) 
         });
-        
         let data = await response.json();
-        
         if (response.status == 200) {
-            showToast(`✅ Transferred $${amount.toFixed(2)} successfully!`, "success");
-            load_organization();
-            setTimeout(() => loadAccountsForTransfer(), 1000);
+            showToast("Withdrawal successful", "success");
+            load_organization();  
+            document.getElementById("transfer-title").value = "";
+            document.getElementById("transfer-amount").value = "";
+            document.getElementById("transfer-modal").classList.remove("show");
         } else {
-            showToast(data.error || "Transfer failed", "error");
+            showToast(data.error || "Withdrawal failed", "error");
         }
     } catch (error) {
-        console.error("Transfer error:", error);
+        console.error("Withdrawal error:", error);
         showToast("Connection error", "error");
     }
-    
-    document.getElementById("transfer-title").value = "";
-    document.getElementById("transfer-amount").value = "";
-}
-
-function setupTransferModal() {
-    const transferBtn = document.getElementById("transfer-btn");
-    if (transferBtn) {
-        transferBtn.addEventListener("click", () => {
-            loadAccountsForTransfer();
-            document.getElementById("transfer-modal").classList.add("show");
-        });
-    }
-    
-    document.getElementById("confirm-transfer")?.addEventListener("click", () => {
-        transferMoney();
-    });
-    
-    document.querySelectorAll(".close-transfer-modal").forEach(btn => {
-        btn.addEventListener("click", () => {
-            document.getElementById("transfer-modal").classList.remove("show");
-        });
-    });
-    
-    window.addEventListener("click", (e) => {
-        const modal = document.getElementById("transfer-modal");
-        if (e.target === modal) {
-            modal.classList.remove("show");
-        }
-    });
 }
