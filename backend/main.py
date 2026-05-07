@@ -173,7 +173,6 @@ def login(login_request: LoginRequest):
         raise fastapi.HTTPException(status_code=500, detail=str(e))
     finally:
         conn.close()
-
 @app.post("/new_organization/")
 def add_organization(form: Organization):
     try:
@@ -183,19 +182,13 @@ def add_organization(form: Organization):
         if cursor.fetchone():
             raise fastapi.HTTPException(status_code=403, detail="Organization name already exists")
         org_id = str(uuid.uuid4())
-        members_json = f'["{form.owner_id}"]'
+        members_str = f"[{form.owner_id}]"
         cursor.execute(
             """INSERT INTO organizations 
                (id, name, description, balance, owner_id, created_at, members, approver) 
                VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-          (     org_id,
-                form.name,
-                form.description,
-                0.0,                     
-                form.owner_id,
-                datetime.datetime.now(),
-                members_json,
-                "auto"       ))
+            (org_id, form.name, form.description, 0.0, form.owner_id, datetime.datetime.now(), members_str, "auto")
+        )
         conn.commit()
         return {
             "message": "Organization created successfully",
@@ -267,6 +260,7 @@ def get_organizations(user_id: Optional[str] = None):
         return {"error": str(e)}
     finally:
         conn.close()
+
 @app.post("/new_transaction/")
 def new_transaction(transaction: Transaction):
     try:
@@ -424,5 +418,3 @@ def spend(card: CardTransaction):
         return {"error": str(e)}
     finally:
         conn.close()
-
-
