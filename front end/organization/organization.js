@@ -68,16 +68,10 @@ async function load_transactions(org_id,org_name){
                 `
             transactions_div.appendChild(transaction_div);
             count+=1;
-        }
-
-        
-    }
-}
-
+        }}}
 document.getElementById("donate-btn").addEventListener("click", function() {
     document.getElementById("add-transaction-modal").classList.add("show");
 });
-
 async function load_members(org_id){
     let response = await fetch(API_URL + "organization/" + org_id + "/members/",{
         method: "GET",
@@ -101,7 +95,6 @@ async function load_members(org_id){
         members_div.appendChild(members_list);
     }
 }
-
 async function new_transaction(){
     const amount = parseFloat(document.getElementById("transaction-amount").value);
     const description = document.getElementById("transaction-description").value;
@@ -157,7 +150,6 @@ function showToast(message, type) {
         `;
         document.body.appendChild(toastContainer);
     }
-    
     const toast = document.createElement("div");
     toast.style.cssText = `
         background: ${type === "success" ? "#04e22c" : "#e40101"};
@@ -174,65 +166,48 @@ function showToast(message, type) {
     toastContainer.appendChild(toast);
     setTimeout(() => toast.remove(), 5000);
 }
-
 document.getElementById("donate-btn").addEventListener("click", function() {
     document.getElementById("add-transaction-modal").classList.add("show");
 })
-
 document.getElementById("create-transaction").addEventListener("click", function() {
     document.getElementById("add-transaction-modal").classList.remove("show");
     new_transaction();
 })
-
 document.querySelectorAll('.close-modal, .btn-cancel').forEach(btn => {
     btn.addEventListener("click", function() {
         document.getElementById("add-transaction-modal").classList.remove("show");
     });
 });
-
 window.addEventListener("click", function(e) {
     const modal = document.getElementById("add-transaction-modal");
     if (e.target === modal) {
         modal.classList.remove("show");
-    }
+}
 });
-
 document.addEventListener("DOMContentLoaded", function() {
     load_organization();
     if (localStorage.getItem("user_id") != null){
-        document.getElementById("logout-btn").addEventListener("click", logout);
-    }
+        document.getElementById("logout-btn").addEventListener("click", logout);}
     else {
         document.getElementById("logout-btn").innerHTML = "Login"
         document.getElementById("logout-btn").addEventListener("click", function (){
             window.location.href = "../login/login.html"
-        })
-    }
-    setupSimpleWithdraw();
+        })}
+    setupWithdraw();
 });
-// I WANT TO SLEEEEEEEEEEEEEEEEEEEEEEEEP
-function setupSimpleWithdraw() {
+function setupWithdraw() {
     const withdrawBtn = document.getElementById("transfer-btn");
     if (!withdrawBtn) return;
     const modal = document.getElementById("transfer-modal");
-    if (modal) {
-        const senderGroup = document.querySelector("#sender-account")?.closest(".form-group");
-        const receiverGroup = document.querySelector("#receiver-account")?.closest(".form-group");
-        if (senderGroup) senderGroup.style.display = "none";
-        if (receiverGroup) receiverGroup.style.display = "none";
-        const modalHeader = modal.querySelector(".modal-header h3");
-        if (modalHeader) modalHeader.innerText = "Withdraw Money";
-        const submitBtn = document.getElementById("confirm-transfer");
-        if (submitBtn) submitBtn.innerText = "Withdraw";
-    }
+    if (!modal) return;
     withdrawBtn.addEventListener("click", () => {
         const titleInput = document.getElementById("transfer-title");
-        const amountInput = document.getElementById("transfer-amount");
+        const amountInput = document.getElementById("withdraw-amount");
         if (titleInput) titleInput.value = "";
         if (amountInput) amountInput.value = "";
         modal.classList.add("show");
     });
-    const confirmBtn = document.getElementById("confirm-transfer");
+    const confirmBtn = document.getElementById("confirm-withdraw");
     if (confirmBtn) {
         const newConfirmBtn = confirmBtn.cloneNode(true);
         confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
@@ -240,20 +215,20 @@ function setupSimpleWithdraw() {
             performWithdrawal();
         });
     }
-    document.querySelectorAll(".close-transfer-modal").forEach(btn => {
+    document.querySelectorAll(".close-withdraw-modal, .close-transfer-modal").forEach(btn => {
         btn.addEventListener("click", () => {
             modal.classList.remove("show");
-            // bruh it's 3 AM
         });
     });
     window.addEventListener("click", (e) => {
         if (e.target === modal) {
-            modal.classList.remove("show");     } 
+            modal.classList.remove("show");
+        }
     });
-}
+} // it's 3 AM
 async function performWithdrawal() {
     const title = document.getElementById("transfer-title").value;
-    const amount = parseFloat(document.getElementById("transfer-amount").value);
+    const amount = parseFloat(document.getElementById("withdraw-amount").value);
     const token = localStorage.getItem("token");
     const user_id = localStorage.getItem("user_id");
     const urlParams = new URLSearchParams(window.location.search);
@@ -267,26 +242,28 @@ async function performWithdrawal() {
         showToast("Please enter a valid amount", "error");
         return;
     }
+// I WANT TO SLEEEEEEEP
     try {
         let response = await fetch(API_URL + "new_transaction/", {
             method: "POST",
             headers: {
                 "Authorization": "Token " + token,
                 "Content-Type": "application/json"
-},
+            },
             body: JSON.stringify({
                 title: title,
                 sender_bank_account_id: org_id,
                 sender_user_id: user_id,
                 receiver_bank_account_id: "outside",
-                amount: amount}) 
+                amount: amount
+            })
         });
         let data = await response.json();
         if (response.status == 200) {
             showToast("Withdrawal successful", "success");
-            load_organization();  
+            load_organization();
             document.getElementById("transfer-title").value = "";
-            document.getElementById("transfer-amount").value = "";
+            document.getElementById("withdraw-amount").value = "";
             document.getElementById("transfer-modal").classList.remove("show");
         } else {
             showToast(data.error || "Withdrawal failed", "error");
