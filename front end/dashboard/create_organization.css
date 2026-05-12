@@ -26,7 +26,7 @@
 .side-bar {
     position: fixed;
     width: 280px;
-    background: linear-gradient(315deg, #5c4e4e 0%, #19191a 43%, #000000 100%);
+    background:  rgba(255,255,255,0.2);
     color: white;
     
     display: flex;
@@ -56,7 +56,7 @@
 }
 
 .welcome-message span{
-    background: linear-gradient(315deg, #0312b5 0%, #0ccddf 100%);
+    background:  rgba(255,255,255,0.2);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -114,7 +114,7 @@
     background: #dededf;
 }
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
     background: #cdd3db;
     color: #112038;
 }
