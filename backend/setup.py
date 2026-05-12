@@ -45,22 +45,9 @@ def setup():
                     Email TEXT NOT NULL,
                     created_at DATETIME NOT NULL,
                     organizations TEXT NOT NULL,
-                    cards TEXT NOT NULL,
                     super_admin BOOLEAN NOT NULL DEFAULT 0
                 )""")
     
-    cursor.execute("""
-                CREATE TABLE IF NOT EXISTS cards (
-                    id TEXT PRIMARY KEY,
-                    card_name TEXT NOT NULL,
-                    card_holder_id TEXT NOT NULL,
-                    card_number TEXT NOT NULL,
-                    expiration_date DATETIME NOT NULL,
-                    cvv TEXT NOT NULL,
-                    bank_account_id TEXT NOT NULL,
-                    spending_limit REAL NOT NULL,
-                    spent_money REAL NOT NULL
-                )""")
     
     cursor.execute("""
                 CREATE TABLE IF NOT EXISTS notes (
@@ -89,7 +76,6 @@ def reset_database():
     cursor.execute("DROP TABLE IF EXISTS bank_accounts")
     cursor.execute("DROP TABLE IF EXISTS transactions")
     cursor.execute("DROP TABLE IF EXISTS users")
-    cursor.execute("DROP TABLE IF EXISTS cards")
     cursor.execute("DROP TABLE IF EXISTS notes")
     cursor.execute("DROP TABLE IF EXISTS pending_accounts")
     setup()
