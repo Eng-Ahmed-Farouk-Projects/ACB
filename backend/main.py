@@ -29,7 +29,7 @@ app = fastapi.FastAPI()
 
 app.add_middleware(
     fastapi.middleware.cors.CORSMiddleware,
-    allow_origins=["https://eng-ahmed-farouk-projects.github.io"],
+    allow_origins=["https://eng-ahmed-farouk-projects.github.io/"],
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True, 
