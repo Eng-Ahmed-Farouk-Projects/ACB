@@ -9,7 +9,6 @@ import uuid
 import bcrypt
 import jwt
 import os
-import faker
 
 fake = faker.Faker()
 SECRET_KEY = os.getenv("SECRET_KEY")  
@@ -87,17 +86,6 @@ class Transaction(pydantic.BaseModel):
     receiver_bank_account_id: str
     amount: float
 
-class Card(pydantic.BaseModel):
-    card_name: str
-    card_holder_id: str
-    bank_account_id: str
-    spending_limit: float
-
-class CardTransaction(pydantic.BaseModel):
-    card_number: str
-    cvv: str
-    amount: float
-    description: Optional[str] = None
 
 class Token(pydantic.BaseModel):
     token: str
@@ -340,81 +328,6 @@ def get_organization_transactions(account_id: str):
             "amount": transaction[5],
             "timestamp": transaction[6]
         } for transaction in transactions]
-    except Exception as e:
-        return {"error": str(e)}
-    finally:
-        conn.close()
-
-@app.post("/new_card/")
-def new_card(card: Card):
-    try:
-        conn = sqlite3.connect(database_path)
-        cursor = conn.cursor()
-        card_id = str(uuid.uuid4())
-        cursor.execute("INSERT INTO cards (id, card_name, card_holder_id, card_number, expiration_date, cvv, bank_account_id, spending_limit, spent_money) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                       (card_id, card.card_name, card.card_holder_id, fake.credit_card_number(), fake.credit_card_expire(), fake.credit_card_security_code(), card.bank_account_id, card.spending_limit, 0.0))
-        conn.commit()
-        return {
-            "card_id": card_id,
-            "card_name": card.card_name,
-            "card_holder_id": card.card_holder_id,
-            "bank_account_id": card.bank_account_id,
-            "card_number": fake.credit_card_number(),
-            "expiration_date": fake.credit_card_expire(),
-            "cvv": fake.credit_card_security_code(),
-            "spending_limit": card.spending_limit
-        }
-    except Exception as e:
-        return {"error": str(e)}
-    finally:
-        conn.close()
-
-@app.get("/cards/{card_id}/")
-def get_card(card_id: str):
-    try:
-        conn = sqlite3.connect(database_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, card_name, card_holder_id, card_number, expiration_date, cvv, bank_account_id, spending_limit, spent_money FROM cards WHERE id = ?",
-                       (card_id,))
-        card = cursor.fetchone()
-        if card:
-            return {
-                "id": card[0],
-                "card_name": card[1],
-                "card_holder_id": card[2],
-                "card_number": card[3],
-                "expiration_date": card[4],
-                "cvv": card[5],
-                "bank_account_id": card[6],
-                "spending_limit": card[7],
-                "spent_money": card[8]
-            }
-        else:
-            return {"error": "Card not found"}
-    except Exception as e:
-        return {"error": str(e)}
-    finally:
-        conn.close()
-
-@app.post("/spend/")
-def spend(card: CardTransaction):
-    try:
-        conn = sqlite3.connect(database_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT spending_limit, spent_money, cvv, expiration_date FROM cards WHERE card_number = ?", (card.card_number,))
-        card_data = cursor.fetchone()
-        if card_data:
-            if card_data[2] != card.cvv:
-                return {"error": "Invalid CVV"}
-            if card_data[3] < datetime.datetime.now().strftime("%Y-%m-%d"):
-                return {"error": "Card has expired"}
-            if card_data[1] + card.amount > card_data[0]:
-                return {"error": "Spending limit exceeded"}
-            cursor.execute("UPDATE cards SET spent_money = spent_money + ? WHERE id = ?", (card.amount, card.card_id))
-            conn.commit()
-            return {"message": "Transaction successful"}
-        else:
-            return {"error": "Card not found"}
     except Exception as e:
         return {"error": str(e)}
     finally:
