@@ -26,7 +26,7 @@
 .side-bar {
     position: fixed;
     width: 280px;
-    background:  rgba(0,0,0,0.2);
+    background:  rgba(255,255,255,0.2);
     color: white;
     
     display: flex;
@@ -156,7 +156,7 @@ body {
     cursor: pointer;
     transition: all 0.2s;
     gap: 10px;
-    background:  rgba(0,0,0,0.2);
+    background: linear-gradient(315deg, #5c4e4e 0%, #19191a 43%, #000000 100%);
     border: none;
     color: white;
 }
