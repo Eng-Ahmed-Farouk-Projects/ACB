@@ -1,4 +1,4 @@
-const API_URL = "https://acb-production.up.railway.app/";
+const API_URL = "https://acb-production-68c9.up.railway.app/";
 msg_area = document.getElementById("message-area");
 
 async function login(){
