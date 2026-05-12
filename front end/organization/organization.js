@@ -63,7 +63,7 @@ async function load_transactions(org_id,org_name){
                 <p class="date">${new Date(transaction.timestamp).toLocaleString()}</p>
                 `
             transactions_div.appendChild(transaction_div);
-        }
+        }}}
 document.getElementById("donate-btn").addEventListener("click", function() {
     document.getElementById("add-transaction-modal").classList.add("show");
 });
