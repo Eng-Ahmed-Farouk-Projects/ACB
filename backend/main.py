@@ -29,9 +29,10 @@ app = fastapi.FastAPI()
 
 app.add_middleware(
     fastapi.middleware.cors.CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://eng-ahmed-farouk-projects.github.io"],
     allow_methods=["*"],
     allow_headers=["*"],
+    allow_credentials=True, 
 )
 
 def create_token(user_id: str):
