@@ -10,7 +10,6 @@ import bcrypt
 import jwt
 import os
 
-fake = faker.Faker()
 SECRET_KEY = os.getenv("SECRET_KEY")  
 ALGORITHM = os.getenv("ALGORITHM")
 
@@ -99,7 +98,7 @@ def add_user(user: User):
         cursor.execute("SELECT id FROM users WHERE username = ?", (user.username,))
         if cursor.fetchone():
             return {"error": "Username already exists"}
-        cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, organizations, cards) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, organizations) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     (user_id, user.username, user.display_name, encrypt_password(user.password), user.email, datetime.datetime.now(), "[]", "[]"))
         conn.commit()
         print(encrypt_password(user.password))
