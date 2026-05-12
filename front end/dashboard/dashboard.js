@@ -1,4 +1,4 @@
-const API_URL = "https://acb-production.up.railway.app/";
+const API_URL = "https://acb-production-68c9.up.railway.app/";
 
 function logout() {
     // Clear local storage
@@ -10,7 +10,6 @@ function logout() {
     // Redirect to login page
     window.location.href = "../login/login.html";
 }
-
 async function load_organizations(){
     let token = localStorage.getItem("token");
     let organizations = document.getElementById("organizations");
