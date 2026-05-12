@@ -79,7 +79,7 @@ def reset_database():
     cursor.execute("DROP TABLE IF EXISTS notes")
     cursor.execute("DROP TABLE IF EXISTS pending_accounts")
     setup()
-    cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, organizations, cards, super_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    cursor.execute("INSERT INTO users (id, username, display_name, encrypted_password, Email, created_at, organizations, super_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                    (str(uuid.uuid4()),"ziad_elhusiny","ziad",bcrypt.hashpw("12345678".encode("utf-8"),bcrypt.gensalt()).decode('utf-8'),"ziad@gmail.com",datetime.datetime.now(),str([]),str([]), True))
     conn.commit()
     conn.close()
