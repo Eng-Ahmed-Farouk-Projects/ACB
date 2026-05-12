@@ -12,8 +12,8 @@ import os
 import faker
 
 fake = faker.Faker()
-SECRET_KEY = os.getenv("secret_key")
-ALGORITHM = os.getenv("algorithm")
+SECRET_KEY = os.getenv("SECRET_KEY")  
+ALGORITHM = os.getenv("ALGORITHM")
 
 sqlite3.register_adapter(datetime.datetime, lambda dt: dt.isoformat())
 sqlite3.register_converter("timestamp", lambda v: datetime.datetime.fromisoformat(v.decode()))
