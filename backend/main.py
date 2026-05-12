@@ -53,6 +53,14 @@ def create_token(user_id: str):
     else:
         fastapi.HTTPException(status_code=404, detail="User not found")
 
+def is_owner(user_id: str, org_id: str) -> bool:
+    conn = sqlite3.connect(database_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT owner_id FROM organizations WHERE id = ?", (org_id,))
+    result = cursor.fetchone()
+    conn.close()
+    return result is not None and result[0] == user_id
+
 def decode_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -259,11 +267,31 @@ def new_transaction(transaction: Transaction):
     try:
         conn = sqlite3.connect(database_path)
         cursor = conn.cursor()
+        org_id = None
+        if transaction.sender_bank_account_id != "outside":
+            org_id = transaction.sender_bank_account_id
+        elif transaction.receiver_bank_account_id != "outside":
+            org_id = transaction.receiver_bank_account_id
+        else:
+            return {"error": "Invalid transaction: neither side is a valid organization"}
+        if not is_owner(transaction.sender_user_id, org_id):
+            return {"error": "Only the organization owner can deposit or withdraw money"}
         transaction_id = str(uuid.uuid4())
-        cursor.execute("INSERT INTO transactions (id, title, sender_bank_account_id, sender_user_id, receiver_bank_account_id, amount, timestamp, notes, receipts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                       (transaction_id, transaction.title, transaction.sender_bank_account_id, transaction.sender_user_id, transaction.receiver_bank_account_id, transaction.amount, datetime.datetime.now(), "[]", "[]"))
-        cursor.execute("UPDATE organizations SET balance = balance - ? WHERE id = ?", (transaction.amount, transaction.sender_bank_account_id))
-        cursor.execute("UPDATE organizations SET balance = balance + ? WHERE id = ?", (transaction.amount, transaction.receiver_bank_account_id))
+        cursor.execute("""
+            INSERT INTO transactions 
+            (id, title, sender_bank_account_id, sender_user_id, receiver_bank_account_id, amount, timestamp, notes, receipts) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            transaction_id, transaction.title, transaction.sender_bank_account_id,
+            transaction.sender_user_id, transaction.receiver_bank_account_id,
+            transaction.amount, datetime.datetime.now(), "[]", "[]"
+        ))
+        if transaction.sender_bank_account_id != "outside":
+            cursor.execute("UPDATE organizations SET balance = balance - ? WHERE id = ?", 
+                          (transaction.amount, transaction.sender_bank_account_id))
+        if transaction.receiver_bank_account_id != "outside":
+            cursor.execute("UPDATE organizations SET balance = balance + ? WHERE id = ?", 
+                          (transaction.amount, transaction.receiver_bank_account_id))
         conn.commit()
         return {
             "transaction_id": transaction_id,
@@ -278,7 +306,6 @@ def new_transaction(transaction: Transaction):
         return {"error": str(e)}
     finally:
         conn.close()
-
 @app.get("/transactions/{transaction_id}/")
 def get_transaction(transaction_id: str):
     try:
