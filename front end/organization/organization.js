@@ -48,11 +48,7 @@ async function load_transactions(org_id,org_name){
             transactions_div.innerHTML = `<div class="no-transactions"><p>No transactions found for this organization</p></div>`;
             return;
         }
-        let count = 0;
         for (let transaction of data.toReversed()){
-            if (count>=5){
-                break;
-            }
             let transaction_div = document.createElement("div");
             if (transaction.receiver_bank_account_id == org_name){
                 transaction_div.className = "transaction incoming";
@@ -67,8 +63,7 @@ async function load_transactions(org_id,org_name){
                 <p class="date">${new Date(transaction.timestamp).toLocaleString()}</p>
                 `
             transactions_div.appendChild(transaction_div);
-            count+=1;
-        }}}
+        }
 document.getElementById("donate-btn").addEventListener("click", function() {
     document.getElementById("add-transaction-modal").classList.add("show");
 });
