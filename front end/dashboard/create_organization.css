@@ -6,7 +6,7 @@
 
 .submit-btn:hover {
     transform: translateY(-4px);
-    box-shadow: 0px 4px 10px rgba(3, 15, 158, 0.3);
+    box-shadow: 0px 4px 10px black;
 }
 
 .input-group {
@@ -16,7 +16,7 @@
     gap: 10px;
 }
 .form-hint {
-    font-size: 15px;
+    font-size: 17px;
     color: #64748b;
 }
 .container {
@@ -26,9 +26,9 @@
 .side-bar {
     position: fixed;
     width: 280px;
-    background:  rgba(255,255,255,0.2);
+    border-radius: 0 0 50px 0;
+    background:  black;
     color: white;
-    
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -43,9 +43,9 @@
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 13px;
     padding: 10px 15px;
-    color: rgba(255,255,255,0.8);
+    color: white;
     text-decoration: none;
     border-radius: 10px;
     transition: all 0.3s;
@@ -85,6 +85,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    background: rgba(255,255,255,0.1);
     padding: 30px 25px;
     font-size: 25px;
     font-weight: 750;
@@ -93,13 +94,13 @@
 .logout-btn{
     display: flex;
     align-items: center;
-    
+
     gap: 10px;
     padding: 10px 15px;
-    margin: 20px 15px 30px;
+    margin: 20px 15px 16px;
     background: rgba(255,255,255,0.1);
     border: none;
-    border-radius: 10px;
+    border-radius: 0 0 50px 0;
     color: white;
     cursor: pointer;
     transition: all 0.3s;
@@ -156,7 +157,7 @@ body {
     cursor: pointer;
     transition: all 0.2s;
     gap: 10px;
-    background: linear-gradient(315deg, #5c4e4e 0%, #19191a 43%, #000000 100%);
+    background: black;
     border: none;
     color: white;
 }
