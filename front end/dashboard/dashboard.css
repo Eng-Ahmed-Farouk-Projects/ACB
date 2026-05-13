@@ -4,12 +4,10 @@
     box-sizing: border-box;
     
 }
-
 .organization.create-organization .view-btn {
-    background: linear-gradient(315deg, #000000 0%, #383838 100%);
+    background: black;
     width: 100%;
 }
-
 
 
 
@@ -25,11 +23,10 @@
 }
 .organization.create-organization .view-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(85, 85, 85, 0.637);
+    box-shadow: 0 4px 12px gray;
 }
 .organization.create-organization {
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-    
+    background: white;
     border: 3px dashed #cbd5e1;
     text-align: center;
     justify-content: center;
@@ -47,7 +44,7 @@
 .organization h3{
     font-size: 20px;
     font-weight: 600;
-    color: #0f1a2c;
+    color: darkblue;
     margin-bottom: 10px;
 }
 .loading {
@@ -60,10 +57,10 @@
     grid-column: 1 / -1;
 }
 .side-bar {
-    
     position: fixed;
     width: 280px;
-    background: linear-gradient(315deg, #5c4e4e 0%, #19191a 43%, #000000 100%);
+    border-radius: 0 0 50px 0;
+    background:  black;
     color: white;
     display: flex;
     flex-direction: column;
@@ -84,7 +81,7 @@
     padding: 10px 20px;
     border-radius: 30px;
     
-    background: linear-gradient(315deg, #000000 0%, #222222 100%);
+    background: black;
     transition: all 0.3s;
 }
 
@@ -96,20 +93,20 @@
 .content h2{
     font-size: 25px;
     font-weight: 700;
-    color: #0f1a2c;
+    color: black;
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 2px solid #0f1a2c;
 }
-.logo{
-    
+.logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    background: rgba(255,255,255,0.1);
     padding: 30px 25px;
     font-size: 25px;
     font-weight: 750;
-    border-bottom: 1.5px solid rgba(255,255,255,0.1);
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
 }
 .loading::before {
     content: '';
@@ -132,10 +129,10 @@
 }
 .organization:hover {
     transform: translateY(-6px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 30px black;
 }
 .welcome-message span{
-    background: linear-gradient(315deg, #0312b5 0%, #0ccddf 100%);
+    background: darkblue;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -143,7 +140,7 @@
 .no-organizations {
     text-align: center;
     font-size: 15px;
-    color: #64748b;
+    color: black;
     padding: 60px 20px;
     background: white;
     border-radius: 20px;
@@ -178,10 +175,10 @@
     align-items: center;
     gap: 10px;
     padding: 10px 15px;
-    margin: 20px 15px 30px;
+    margin: 20px 15px 16px;
     background: rgba(255,255,255,0.1);
     border: none;
-    border-radius: 10px;
+    border-radius: 0 0 50px 0;
     color: white;
     cursor: pointer;
     transition: all 0.3s;
