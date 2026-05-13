@@ -4,10 +4,14 @@
     box-sizing: border-box;
     
 }
+
 .organization.create-organization .view-btn {
     background: linear-gradient(315deg, #000000 0%, #383838 100%);
     width: 100%;
 }
+
+
+
 
 .organization p{
     font-size: 15px;
@@ -25,6 +29,7 @@
 }
 .organization.create-organization {
     background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    
     border: 3px dashed #cbd5e1;
     text-align: center;
     justify-content: center;
