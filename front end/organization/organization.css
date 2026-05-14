@@ -4,28 +4,26 @@
     box-sizing: border-box;
 }
 .modal-content {
-
-    
-    background: white;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 450px;
-    animation: slideIn 0.3s;
+    background:white;
+    border-radius:20px;
+    width:90%;
+    max-width:450px;
+    animation:slideIn 0.3s;
     
 }
 .transaction .title {
-    margin-bottom: 10px;
+    margin-bottom:10px;
     font-size: 15px;
     
-    font-weight: 650;
-    color: #0b182e;
+    font-weight:     650;
+    color: darkblue;
     
 }
 
 .stat-info {
-    display: flex;
+    display:flex;
     flex-direction: column;
-    gap: 10px;
+    gap:10px;
 }
 .nav-item.active {
     background: rgba(255, 255, 255, 0.2);
@@ -34,7 +32,7 @@
 .member {
     display: flex;
     gap: 15px;
-    align-items: center;
+    align-items:   center;
 }
 .modal-body {
     padding: 25px;
@@ -42,12 +40,12 @@
 
 .form-group input:focus{
     
-    outline: none;
-    border-color: #000000;
+    outline:none;
+    border-color:black;
 }
 
 .container {
-    display: flex;
+    display:flex;
     min-height: 100vh;
 }
 
@@ -76,7 +74,8 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    background: rgba(255,255,255,0.1);
     padding: 30px 25px;
     font-size: 25px;
     font-weight: 750;
@@ -112,7 +111,7 @@
     }
 }
 .btn-submit {
-    background: linear-gradient(135deg, #000000 0%, #d0f5f8 100%);
+    background: black;
     color: white;
     border: none;
     border-radius: 10px;
@@ -125,7 +124,7 @@
     margin-bottom: 25px;
 }
 .transfer-btn {
-    background: linear-gradient(135deg, #000000 0%, #d0f5f8 100%);
+    background: black;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -153,14 +152,14 @@
 }
 
 .transaction.incoming h3 {
-    color: #0eda6a;
+    color: darkgreen;
 }
 .transaction h3 {
     display: inline-block;
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: 700;
-    color: #bb2b26;
+    color: darkred;
 }
 .loading {
     display: flex;
@@ -189,7 +188,8 @@
 .side-bar {
     position: fixed;
     width: 280px;
-    background: linear-gradient(315deg, #5c4e4e 0%, #19191a 43%, #000000 100%);
+    border-radius: 0 0 50px 0;
+    background:  black;
     color: white;
     display: flex;
     flex-direction: column;
@@ -242,15 +242,15 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 20px 15px 30px;
     padding: 10px 15px;
-    background: rgba(255,255,255,0.15);
+    margin: 20px 15px 16px;
+    background: rgba(255,255,255,0.1);
     border: none;
-    border-radius: 10px;
+    border-radius: 0 0 50px 0;
     color: white;
     cursor: pointer;
     transition: all 0.3s;
-    font-size: 15px;
+    font-size: 16px;
 }
 .nav-menu {
     display: flex;
@@ -262,7 +262,7 @@
 .content h2{
     font-size: 25px;
     font-weight: 700;
-    color: #19273d;
+    color: darkgray;
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid #19273d;
@@ -279,7 +279,7 @@
     margin-bottom: 20px;
 }
 .donate-btn {
-    background: linear-gradient(135deg, #000000 0%, #d0f5f8 100%);
+    background:    black; /* linear-gradient(135deg, #000000 0%, #d0f5f8 100%); */
     color: white;
     border: none;
     border-radius: 10px;
@@ -295,10 +295,10 @@ body {
 }
 .transaction:hover {
     transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow:0 5px 15px rgba(0, 0, 0, 0.2);
 }
 .transaction-header h2 {
-    font-size: 25px;
+    font-size:25px;
     font-weight: 750;
     color: #0c1a31;
 }
@@ -365,7 +365,7 @@ body {
     flex: 1;
 }
 .transaction.incoming {
-    border-left-color: #0eda6a;
+    border-left-color: darkgreen;
 }
 .transaction .detail {
     display: inline-block;
